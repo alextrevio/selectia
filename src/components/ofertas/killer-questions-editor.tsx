@@ -124,7 +124,7 @@ export function KillerQuestionsEditor({ vacancyId, initialQuestions }: Props) {
                         <Label>Tipo</Label>
                         <Select
                           value={q.question_type}
-                          onValueChange={(v) => updateQuestion(i, 'question_type', v)}
+                          onValueChange={(v: string | null) => updateQuestion(i, 'question_type', v ?? 'text')}
                         >
                           <SelectTrigger>
                             <SelectValue />

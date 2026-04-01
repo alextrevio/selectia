@@ -52,9 +52,22 @@ export const EMPLOYMENT_TYPE_OPTIONS = [
 ]
 
 export const LEVEL_OPTIONS = [
+  { value: 'practicante', label: 'Practicante' },
   { value: 'junior', label: 'Junior' },
   { value: 'mid', label: 'Mid' },
   { value: 'senior', label: 'Senior' },
   { value: 'lead', label: 'Lead' },
   { value: 'manager', label: 'Manager' },
+  { value: 'director', label: 'Director' },
+]
+
+export const DEPARTMENT_OPTIONS = [
+  { value: 'tecnologia', label: 'Tecnología' },
+  { value: 'marketing', label: 'Marketing' },
+  { value: 'ventas', label: 'Ventas' },
+  { value: 'rrhh', label: 'Recursos Humanos' },
+  { value: 'finanzas', label: 'Finanzas' },
+  { value: 'operaciones', label: 'Operaciones' },
+  { value: 'legal', label: 'Legal' },
+  { value: 'diseno', label: 'Diseño' },
 ]

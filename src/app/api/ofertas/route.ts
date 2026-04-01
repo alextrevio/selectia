@@ -40,6 +40,12 @@ export async function POST(request: Request) {
       salary_min: body.salary_min ? parseFloat(body.salary_min) : null,
       salary_max: body.salary_max ? parseFloat(body.salary_max) : null,
       employment_type: body.employment_type || 'full_time',
+      status: body.status || 'draft',
+      agent_tone: body.agent_tone || 'professional',
+      agent_greeting: body.agent_greeting || null,
+      auto_reject_below: body.auto_reject_below ?? 30,
+      escalate_to_human_above: body.escalate_to_human_above ?? 80,
+      published_at: body.published_at || null,
     })
     .select()
     .single()
