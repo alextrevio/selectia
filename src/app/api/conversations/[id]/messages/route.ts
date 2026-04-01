@@ -1,6 +1,6 @@
 import { createClient } from '@/lib/supabase/server'
 import { NextResponse } from 'next/server'
-import { sendText } from '@/lib/whatsapp/zavu-client'
+import { sendWhatsAppText } from '@/lib/whatsapp/zavu-client'
 
 export async function GET(_: Request, { params }: { params: Promise<{ id: string }> }) {
   const { id } = await params
@@ -55,7 +55,7 @@ export async function POST(request: Request, { params }: { params: Promise<{ id:
 
       if (candidate?.phone) {
         try {
-          await sendText(candidate.phone, content)
+          await sendWhatsAppText(candidate.phone, content)
         } catch (err) {
           console.error('WhatsApp send error:', err)
         }
@@ -64,7 +64,7 @@ export async function POST(request: Request, { params }: { params: Promise<{ id:
 
     await supabase
       .from('conversations')
-      .update({ status: 'waiting_human', last_message_at: new Date().toISOString() })
+      .update({ status: 'active', last_message_at: new Date().toISOString() })
       .eq('id', id)
   }
 
