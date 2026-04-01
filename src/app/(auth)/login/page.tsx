@@ -7,8 +7,12 @@ import { createClient } from '@/lib/supabase/client'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
-import { Briefcase } from 'lucide-react'
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+} from '@/components/ui/card'
 import { toast } from 'sonner'
 
 export default function LoginPage() {
@@ -21,7 +25,10 @@ export default function LoginPage() {
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault()
     setLoading(true)
-    const { error } = await supabase.auth.signInWithPassword({ email, password })
+    const { error } = await supabase.auth.signInWithPassword({
+      email,
+      password,
+    })
     if (error) {
       toast.error(error.message)
       setLoading(false)
@@ -32,13 +39,17 @@ export default function LoginPage() {
   }
 
   return (
-    <Card>
-      <CardHeader className="text-center">
-        <div className="mx-auto mb-2 flex h-12 w-12 items-center justify-center rounded-full bg-primary/10">
-          <Briefcase className="h-6 w-6 text-primary" />
+    <Card className="shadow-lg border-0">
+      <CardHeader className="text-center pb-2">
+        <div className="mb-4">
+          <span className="text-2xl font-bold tracking-tight">
+            select<span className="text-blue-600">.ia</span>
+          </span>
         </div>
-        <CardTitle className="text-2xl">Iniciar sesión</CardTitle>
-        <CardDescription>Ingresa tus credenciales para acceder</CardDescription>
+        <h1 className="text-xl font-semibold">Iniciar sesión</h1>
+        <p className="text-sm text-muted-foreground">
+          Ingresa tus credenciales para acceder
+        </p>
       </CardHeader>
       <form onSubmit={handleLogin}>
         <CardContent className="space-y-4">
@@ -51,6 +62,7 @@ export default function LoginPage() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
+              autoComplete="email"
             />
           </div>
           <div className="space-y-2">
@@ -58,19 +70,28 @@ export default function LoginPage() {
             <Input
               id="password"
               type="password"
+              placeholder="Tu contraseña"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
+              autoComplete="current-password"
             />
           </div>
         </CardContent>
         <CardFooter className="flex flex-col gap-4">
-          <Button type="submit" className="w-full" disabled={loading}>
+          <Button
+            type="submit"
+            className="w-full bg-blue-600 hover:bg-blue-700 text-white"
+            disabled={loading}
+          >
             {loading ? 'Ingresando...' : 'Iniciar sesión'}
           </Button>
           <p className="text-center text-sm text-muted-foreground">
             ¿No tienes cuenta?{' '}
-            <Link href="/register" className="text-primary hover:underline">
+            <Link
+              href="/register"
+              className="text-blue-600 hover:underline font-medium"
+            >
               Regístrate
             </Link>
           </p>

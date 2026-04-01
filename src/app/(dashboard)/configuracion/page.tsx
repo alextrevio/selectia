@@ -6,12 +6,13 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Switch } from '@/components/ui/switch'
 import { Separator } from '@/components/ui/separator'
-import { useOrg } from '@/hooks/use-org'
 import { useUser } from '@/hooks/use-user'
+import { useTheme } from 'next-themes'
+import { Moon, Sun, Monitor } from 'lucide-react'
 
 export default function ConfiguracionPage() {
-  const { org } = useOrg()
-  const { user } = useUser()
+  const { user, org } = useUser()
+  const { theme, setTheme } = useTheme()
 
   return (
     <div className="space-y-6">
@@ -53,6 +54,44 @@ export default function ConfiguracionPage() {
             <Input value={user?.email || ''} disabled />
           </div>
           <Button>Actualizar perfil</Button>
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>Apariencia</CardTitle>
+          <CardDescription>Tema de la interfaz</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="flex gap-3">
+            <Button
+              variant={theme === 'light' ? 'default' : 'outline'}
+              size="sm"
+              onClick={() => setTheme('light')}
+              className="gap-2"
+            >
+              <Sun className="h-4 w-4" />
+              Claro
+            </Button>
+            <Button
+              variant={theme === 'dark' ? 'default' : 'outline'}
+              size="sm"
+              onClick={() => setTheme('dark')}
+              className="gap-2"
+            >
+              <Moon className="h-4 w-4" />
+              Oscuro
+            </Button>
+            <Button
+              variant={theme === 'system' ? 'default' : 'outline'}
+              size="sm"
+              onClick={() => setTheme('system')}
+              className="gap-2"
+            >
+              <Monitor className="h-4 w-4" />
+              Sistema
+            </Button>
+          </div>
         </CardContent>
       </Card>
 

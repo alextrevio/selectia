@@ -1,18 +1,24 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useMemo } from 'react'
 import { createClient } from '@/lib/supabase/client'
-import type { User } from '@/types/database'
+import type { User, Organization } from '@/types/database'
 
 export function useUser() {
   const [user, setUser] = useState<User | null>(null)
+  const [org, setOrg] = useState<Organization | null>(null)
   const [loading, setLoading] = useState(true)
-  const supabase = createClient()
+  const supabase = useMemo(() => createClient(), [])
 
   useEffect(() => {
     async function fetchUser() {
-      const { data: { user: authUser } } = await supabase.auth.getUser()
-      if (!authUser) { setLoading(false); return }
+      const {
+        data: { user: authUser },
+      } = await supabase.auth.getUser()
+      if (!authUser) {
+        setLoading(false)
+        return
+      }
 
       const { data } = await supabase
         .from('users')
@@ -21,10 +27,20 @@ export function useUser() {
         .single()
 
       setUser(data)
+
+      if (data?.org_id) {
+        const { data: orgData } = await supabase
+          .from('organizations')
+          .select('*')
+          .eq('id', data.org_id)
+          .single()
+        setOrg(orgData)
+      }
+
       setLoading(false)
     }
     fetchUser()
   }, [supabase])
 
-  return { user, loading }
+  return { user, org, loading }
 }

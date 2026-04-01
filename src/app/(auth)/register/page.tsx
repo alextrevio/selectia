@@ -7,8 +7,12 @@ import { createClient } from '@/lib/supabase/client'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
-import { Briefcase } from 'lucide-react'
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+} from '@/components/ui/card'
 import { toast } from 'sonner'
 
 export default function RegisterPage() {
@@ -35,18 +39,23 @@ export default function RegisterPage() {
       setLoading(false)
       return
     }
-    toast.success('Cuenta creada. Revisa tu email para confirmar.')
-    router.push('/login')
+    toast.success('Cuenta creada exitosamente')
+    router.push('/')
+    router.refresh()
   }
 
   return (
-    <Card>
-      <CardHeader className="text-center">
-        <div className="mx-auto mb-2 flex h-12 w-12 items-center justify-center rounded-full bg-primary/10">
-          <Briefcase className="h-6 w-6 text-primary" />
+    <Card className="shadow-lg border-0">
+      <CardHeader className="text-center pb-2">
+        <div className="mb-4">
+          <span className="text-2xl font-bold tracking-tight">
+            select<span className="text-blue-600">.ia</span>
+          </span>
         </div>
-        <CardTitle className="text-2xl">Crear cuenta</CardTitle>
-        <CardDescription>Registra tu empresa y comienza a reclutar</CardDescription>
+        <h1 className="text-xl font-semibold">Crear cuenta</h1>
+        <p className="text-sm text-muted-foreground">
+          Registra tu empresa y comienza a reclutar
+        </p>
       </CardHeader>
       <form onSubmit={handleRegister}>
         <CardContent className="space-y-4">
@@ -58,16 +67,7 @@ export default function RegisterPage() {
               value={fullName}
               onChange={(e) => setFullName(e.target.value)}
               required
-            />
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="orgName">Nombre de la empresa</Label>
-            <Input
-              id="orgName"
-              placeholder="Mi Empresa S.A."
-              value={orgName}
-              onChange={(e) => setOrgName(e.target.value)}
-              required
+              autoComplete="name"
             />
           </div>
           <div className="space-y-2">
@@ -79,6 +79,7 @@ export default function RegisterPage() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
+              autoComplete="email"
             />
           </div>
           <div className="space-y-2">
@@ -91,16 +92,34 @@ export default function RegisterPage() {
               onChange={(e) => setPassword(e.target.value)}
               minLength={6}
               required
+              autoComplete="new-password"
+            />
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="orgName">Nombre de la empresa</Label>
+            <Input
+              id="orgName"
+              placeholder="Mi Empresa S.A."
+              value={orgName}
+              onChange={(e) => setOrgName(e.target.value)}
+              required
             />
           </div>
         </CardContent>
         <CardFooter className="flex flex-col gap-4">
-          <Button type="submit" className="w-full" disabled={loading}>
+          <Button
+            type="submit"
+            className="w-full bg-blue-600 hover:bg-blue-700 text-white"
+            disabled={loading}
+          >
             {loading ? 'Creando cuenta...' : 'Crear cuenta'}
           </Button>
           <p className="text-center text-sm text-muted-foreground">
             ¿Ya tienes cuenta?{' '}
-            <Link href="/login" className="text-primary hover:underline">
+            <Link
+              href="/login"
+              className="text-blue-600 hover:underline font-medium"
+            >
               Inicia sesión
             </Link>
           </p>
