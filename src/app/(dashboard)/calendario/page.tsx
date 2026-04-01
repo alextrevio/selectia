@@ -1,7 +1,6 @@
 import { createClient } from '@/lib/supabase/server'
-import { CalendarView } from '@/components/calendario/calendar-view'
-import { NuevaEntrevistaModal } from '@/components/calendario/nueva-entrevista-modal'
-import type { InterviewWithRelations } from '@/types/database'
+import { CalendarioClient } from '@/components/calendario/calendario-client'
+import type { InterviewWithRelations, Vacancy, Candidate } from '@/types/database'
 
 export default async function CalendarioPage() {
   const supabase = await createClient()
@@ -14,22 +13,32 @@ export default async function CalendarioPage() {
     .eq('id', user.id)
     .single()
 
-  const { data: interviews } = await supabase
-    .from('interviews')
-    .select('*, candidate:candidates(id, full_name, phone), vacancy:vacancies(id, title)')
-    .eq('org_id', userData?.org_id)
-    .order('scheduled_at')
+  const orgId = userData?.org_id
+
+  const [{ data: interviews }, { data: vacancies }, { data: candidates }] = await Promise.all([
+    supabase
+      .from('interviews')
+      .select('*, candidate:candidates(id, full_name, phone), vacancy:vacancies(id, title)')
+      .eq('org_id', orgId)
+      .order('scheduled_at'),
+    supabase
+      .from('vacancies')
+      .select('id, title')
+      .eq('org_id', orgId)
+      .eq('status', 'active')
+      .order('title'),
+    supabase
+      .from('candidates')
+      .select('id, full_name, vacancy_id')
+      .eq('org_id', orgId)
+      .order('full_name'),
+  ])
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-2xl font-bold">Calendario</h1>
-          <p className="text-muted-foreground">Entrevistas programadas</p>
-        </div>
-        <NuevaEntrevistaModal />
-      </div>
-      <CalendarView interviews={(interviews as InterviewWithRelations[]) || []} />
-    </div>
+    <CalendarioClient
+      interviews={(interviews as InterviewWithRelations[]) || []}
+      vacancies={(vacancies as Pick<Vacancy, 'id' | 'title'>[]) || []}
+      candidates={(candidates as Pick<Candidate, 'id' | 'full_name' | 'vacancy_id'>[]) || []}
+    />
   )
 }
