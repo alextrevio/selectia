@@ -33,6 +33,9 @@ export async function POST(request: Request) {
       full_name: body.full_name,
       phone: body.phone || null,
       email: body.email || null,
+      location: body.location || null,
+      skills: body.skills || [],
+      stage: body.stage || 'new',
       source: body.source || 'manual',
     })
     .select()
